@@ -1,6 +1,3 @@
-// let lang1 = "en";
-// let lang2 = "zh-CN";
-
 class Panel {
   constructor() {
     this.creatPanel();
@@ -10,6 +7,7 @@ class Panel {
     let html = `
     <div class="_kt_panel">
         <div class="_kt_lang1">...</div>
+        <hr>
         <div class="_kt_lang2">...</div>
     </div>`;
     let container = document.createElement("div");
@@ -29,18 +27,23 @@ class Panel {
   hide() {
     this.container.style.display = "none";
   }
-  // isShow() {
-  //   return window.getComputedStyle(this.container).display === "block";
-  // }
   translate(lang1) {
     this.container.querySelector("._kt_lang1").innerText = lang1;
-    // fetch(
-    //   `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh&dt=t&q=${lang1}`
-    // )
-      // .then(res => res.json())
-      // .then(result => {
-      //   this.container.querySelector("._kt_lang2").innerText = result[0][0][0];
-      // });
+    fetch(
+      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh&dt=t&q=${lang1}`
+    )
+      .then(res => res.json())
+      .then(result => {
+        this.container.querySelector("._kt_lang2").innerText = null;
+        for (let i = 0; i < result[0].length; i++) {
+          this.container.querySelector("._kt_lang2").innerText +=
+            result[0][i][0];
+        }
+      });
+  }
+  setPositon(x, y) {
+    this.container.style.left = x + "px";
+    this.container.style.top = y + "px";
   }
 }
 
@@ -49,38 +52,23 @@ let panel = new Panel();
 let theSwitch = "off";
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log(request);
-
   if (request.theSwitch) {
     theSwitch = request.theSwitch;
-    sendResponse({ theSwitch: theSwitch, lang1: 1112323656561 });
+    sendResponse({ theSwitch: theSwitch });
   }
 });
 
-document.onmouseup = () => {
-  let str = window
+document.onmouseup = e => {
+  let selectedText = window
     .getSelection()
     .toString()
     .trim();
 
-  if (str) {
-    let fn = () => {
-      return new Promise(resolve => {
-        panel.translate();
-        panel.show();
-        resolve();
-      });
-    };
-
-    fn().then(() => {
-      setTimeout(() => {
-        panel.hide();
-        str = null;
-      }, 2000);
-    });
-  }
-
-  if (!str || theSwitch === "off") {
+  if (selectedText) {
+    panel.setPositon(e.clientX, e.clientY);
+    panel.show();
+    panel.translate(selectedText);
+  } else if (!selectedText || theSwitch === "off") {
     panel.hide();
   }
 };

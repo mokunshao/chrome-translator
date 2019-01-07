@@ -1,8 +1,6 @@
 ._kt_thePanel {
   display: none;
   position: fixed;
-  right: 50%;
-  top: 50%;
   background: white;
   border: 2px solid black;
   z-index: 999;
@@ -11,4 +9,7 @@
 }
 
 ._kt_panel {
+  font-size: 16px;
+  font-family: sans-serif;
+  font-weight: 500;
 }
