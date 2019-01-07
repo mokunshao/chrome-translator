@@ -31,7 +31,7 @@ class Panel {
     this.container.querySelector("._kt_lang1").innerText = lang1;
     this.container.querySelector("._kt_lang2").innerText = null;
     fetch(
-      `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=zh&dt=t&q=${lang1}`
+      `https://translate.google.cn/translate_a/single?client=gtx&sl=auto&tl=zh&dt=t&q=${lang1}`
     )
       .then(res => res.json())
       .then(result => {
