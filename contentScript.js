@@ -1,7 +1,7 @@
 class Panel {
   constructor() {
     this.creatPanel();
-    this.bind();
+    // this.bind();
   }
   creatPanel() {
     let html = `
@@ -16,11 +16,11 @@ class Panel {
     document.body.appendChild(container);
     this.container = container;
   }
-  bind() {
-    this.container.onclick = () => {
-      this.hide();
-    };
-  }
+  // bind() {
+  //   this.container.onclick = () => {
+  //     this.hide();
+  //   };
+  // }
   show() {
     this.container.style.display = "block";
   }
@@ -64,7 +64,7 @@ document.onmouseup = e => {
     .toString()
     .trim();
 
-  if (selectedText) {
+  if (selectedText && theSwitch === "on") {
     panel.setPositon(e.clientX, e.clientY);
     panel.show();
     panel.translate(selectedText);
