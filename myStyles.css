@@ -1,0 +1,14 @@
+._kt_thePanel {
+  display: none;
+  position: fixed;
+  right: 50%;
+  top: 50%;
+  background: white;
+  border: 2px solid black;
+  z-index: 999;
+  color: black;
+  text-align: left;
+}
+
+._kt_panel {
+}
