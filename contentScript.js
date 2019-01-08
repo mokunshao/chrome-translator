@@ -1,42 +1,46 @@
-class Panel {
+class Translator {
   constructor() {
     this.creatPanel();
-    // this.bind();
+    this.bind();
   }
   creatPanel() {
-    let html = `
-    <div class="_kt_panel">
-        <div class="_kt_lang1">...</div>
-        <hr>
-        <div class="_kt_lang2">...</div>
-    </div>`;
+    let panelContent = `
+    <header><span>ktranslator</span><span class="exit">x</span></header>
+    <main>
+      <div class="lang">语言1</div>
+      <div class="text1">...</div>
+      <hr />
+      <div class="lang">语言2</div>
+      <div class="text2">...</div>
+    </main>
+    `;
     let container = document.createElement("div");
-    container.innerHTML = html;
-    container.classList.add("_kt_thePanel");
+    container.innerHTML = panelContent;
+    container.classList.add("ktranslator");
     document.body.appendChild(container);
     this.container = container;
   }
-  // bind() {
-  //   this.container.onclick = () => {
-  //     this.hide();
-  //   };
-  // }
-  show() {
-    this.container.style.display = "block";
+  bind() {
+    this.container.querySelector(".exit").addEventListener("click", () => {
+      this.hidePanel();
+    });
   }
-  hide() {
-    this.container.style.display = "none";
+  showPanel() {
+    this.container.classList.add("show");
+  }
+  hidePanel() {
+    this.container.classList.remove("show");
   }
   translate(lang1) {
-    this.container.querySelector("._kt_lang1").innerText = lang1;
-    this.container.querySelector("._kt_lang2").innerText = null;
+    this.container.querySelector(".text1").innerText = lang1;
+    this.container.querySelector(".text2").innerText = null;
     fetch(
       `https://translate.google.cn/translate_a/single?client=gtx&sl=auto&tl=zh&dt=t&q=${lang1}`
     )
       .then(res => res.json())
       .then(result => {
         for (let i = 0; i < result[0].length; i++) {
-          this.container.querySelector("._kt_lang2").innerText +=
+          this.container.querySelector(".text2").innerText +=
             result[0][i][0];
         }
       });
@@ -47,9 +51,9 @@ class Panel {
   }
 }
 
-let panel = new Panel();
+let translator = new Translator();
 
-let theSwitch = "off";
+let theSwitch = "on";
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.theSwitch) {
@@ -65,10 +69,10 @@ document.onmouseup = e => {
     .trim();
 
   if (selectedText && theSwitch === "on") {
-    panel.setPositon(e.clientX, e.clientY);
-    panel.show();
-    panel.translate(selectedText);
+    translator.setPositon(e.clientX, e.clientY);
+    translator.showPanel();
+    translator.translate(selectedText);
   } else if (!selectedText || theSwitch === "off") {
-    panel.hide();
+    // translator.hidePanel();
   }
 };

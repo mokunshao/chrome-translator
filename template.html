@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      .ktranslator {
+        /* display: none; */
+        position: fixed;
+        background: white;
+        border: 2px solid black;
+        z-index: 999;
+        color: black;
+        text-align: left;
+        font-size: 16px;
+        font-family: sans-serif;
+        font-weight: 500;
+        border-radius: 5px;
+      }
+
+      .ktranslator > * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .ktranslator > header {
+        background: grey;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        min-width: 110px;
+      }
+
+      .ktranslator > header > span {
+        margin: 0 5px;
+        cursor: pointer;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div class="ktranslator">
+      <header><span>ktranslator</span><span>x</span></header>
+      <main>
+        <div>语言1</div>
+        <div class="_kt_lang1">...</div>
+        <hr />
+        <div>语言2</div>
+        <div class="_kt_lang2">...</div>
+      </main>
+    </div>
+  </body>
+</html>
