@@ -3,12 +3,16 @@
   "description": "A Chrome Translator Extension",
   "version": "1.0",
   "manifest_version": 2,
-  "permissions": ["activeTab", "storage","tabs"],
+  "permissions": ["activeTab", "storage", "tabs", "contextMenus"],
   "icons": {
     "16": "images/16.png",
     "32": "images/32.png",
     "48": "images/48.png",
     "128": "images/128.png"
+  },
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "content_scripts": [
     {
@@ -25,5 +29,9 @@
     },
     "default_title": "ktranslator",
     "default_popup": "popup.html"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": false
   }
 }

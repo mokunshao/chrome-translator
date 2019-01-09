@@ -7,10 +7,10 @@ class Translator {
     let panelContent = `
     <header><span>ktranslator</span><span class="exit">x</span></header>
     <main>
-      <div class="lang">语言1</div>
+      <div class="lang" id="lang1">Language 1</div>
       <div class="text1">...</div>
       <hr />
-      <div class="lang">语言2</div>
+      <div class="lang" id="lang2">Language 2</div>
       <div class="text2">...</div>
     </main>
     `;
@@ -31,11 +31,13 @@ class Translator {
   hidePanel() {
     this.container.classList.remove("show");
   }
-  translate(lang1) {
-    this.container.querySelector(".text1").innerText = lang1;
+  translate(raw) {
+    this.container.querySelector("#lang1").innerText = lang1;
+    this.container.querySelector("#lang2").innerText = lang2;
+    this.container.querySelector(".text1").innerText = raw;
     this.container.querySelector(".text2").innerText = null;
     fetch(
-      `https://translate.google.cn/translate_a/single?client=gtx&sl=auto&tl=zh&dt=t&q=${lang1}`
+      `https://translate.google.cn/translate_a/single?client=gtx&sl=${lang1}&tl=${lang2}&dt=t&q=${raw}`
     )
       .then(res => res.json())
       .then(result => {
@@ -52,19 +54,25 @@ class Translator {
 
 let translator = new Translator();
 
-let switchStatus;
+let switchStatus, lang1, lang2;
 
-chrome.storage.local.get(["switchStatus"], function(e) {
+chrome.storage.local.get(["switchStatus", "lang1", "lang2"], function(e) {
   if (e.switchStatus) {
     switchStatus = e.switchStatus;
+    lang1 = e.lang1;
+    lang2 = e.lang2;
   } else {
     switchStatus = "off";
+    lang1 = "auto";
+    lang2 = "zh-CN";
   }
 });
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  chrome.storage.local.get(["switchStatus"], function(e) {
+  chrome.storage.local.get(["switchStatus", "lang1", "lang2"], function(e) {
     switchStatus = e.switchStatus;
+    lang1 = e.lang1;
+    lang2 = e.lang2;
   });
 });
 
