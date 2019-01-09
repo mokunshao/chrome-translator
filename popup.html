@@ -9,11 +9,12 @@
     </style>
   </head>
   <body>
-    <div>是否开启划词翻译</div>
-    <select id="select">
-      <option value="off">关</option>
-      <option value="on">开</option>
-    </select>
+    <div>开启划词翻译</div>
+    <form id="switch">
+      <label for="on">开</label> <input type="radio" name="switch" id="on" value="on"/>
+      <label for="off">关</label> <input type="radio" name="switch" id="off" value="off"/>
+    </form>
+    <div id="qq"></div>
     <script src="popup.js"></script>
   </body>
 </html>

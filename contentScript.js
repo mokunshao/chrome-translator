@@ -40,8 +40,7 @@ class Translator {
       .then(res => res.json())
       .then(result => {
         for (let i = 0; i < result[0].length; i++) {
-          this.container.querySelector(".text2").innerText +=
-            result[0][i][0];
+          this.container.querySelector(".text2").innerText += result[0][i][0];
         }
       });
   }
@@ -53,13 +52,20 @@ class Translator {
 
 let translator = new Translator();
 
-let theSwitch = "on";
+let switchStatus;
+
+chrome.storage.local.get(["switchStatus"], function(e) {
+  if (e.switchStatus) {
+    switchStatus = e.switchStatus;
+  } else {
+    switchStatus = "off";
+  }
+});
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.theSwitch) {
-    theSwitch = request.theSwitch;
-    sendResponse({ theSwitch: theSwitch });
-  }
+  chrome.storage.local.get(["switchStatus"], function(e) {
+    switchStatus = e.switchStatus;
+  });
 });
 
 document.onmouseup = e => {
@@ -68,11 +74,11 @@ document.onmouseup = e => {
     .toString()
     .trim();
 
-  if (selectedText && theSwitch === "on") {
+  if (selectedText && switchStatus === "on") {
     translator.setPositon(e.clientX, e.clientY);
     translator.showPanel();
     translator.translate(selectedText);
-  } else if (!selectedText || theSwitch === "off") {
+  } else if (!selectedText || switchStatus === "off") {
     // translator.hidePanel();
   }
 };

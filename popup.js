@@ -1,8 +1,24 @@
-let selectNode = document.querySelector("#select");
-selectNode.onchange = function() {
-  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    chrome.tabs.sendMessage(tabs[0].id, { theSwitch: this.value }, response => {
-      console.log(response);
-    });
+let theSwitch = document.querySelector("#switch");
+
+chrome.storage.local.get(["switchStatus"], e => {
+  if (e.switchStatus) {
+    theSwitch.querySelector(`input[value="${e.switchStatus}"]`).checked = true;
+  } else {
+    theSwitch.querySelector(`input[value="off"]`).checked = true;
+  }
+  chrome.tabs.query({ url: "<all_urls>" }, tabs => {
+    for (let i = 1; i < tabs.length; i++) {
+      chrome.tabs.sendMessage(tabs[i].id, {});
+    }
+  });
+});
+
+theSwitch.onchange = function(e) {
+  e.target.checked = true;
+  chrome.storage.local.set({ switchStatus: e.target.value });
+  chrome.tabs.query({ url: "<all_urls>" }, tabs => {
+    for (let i = 1; i < tabs.length; i++) {
+      chrome.tabs.sendMessage(tabs[i].id, {});
+    }
   });
 };
