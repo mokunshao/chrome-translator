@@ -1,25 +1,29 @@
-let lang1 = document.querySelector("#lang1");
-let lang2 = document.querySelector("#lang2");
+let select1 = document.querySelector("#select1");
+let select2 = document.querySelector("#select2");
 
 chrome.storage.local.get(["lang1", "lang2"], function(e) {
-  lang1.value = e.lang1;
-  lang2.value = e.lang2;
+  if (e.lang1) {
+    select1.value = e.lang1.value;
+  }
+  if (e.lang2) {
+    select2.value = e.lang2.value;
+  }
+  if (!e.lang1) {
+    select1.value = "auto";
+    chrome.storage.local.set({ lang1: { value: "auto", label: "auto" } });
+  }
+  if (!e.lang2) {
+    select2.value = "zn-CN";
+    chrome.storage.local.set({ lang1: { value: "zh-CN", label: "简体中文" } });
+  }
 });
 
-lang1.onchange = function(e) {
-  chrome.storage.local.set({ lang1: e.target.value });
-  chrome.tabs.query({ url: "<all_urls>" }, tabs => {
-    for (let i = 1; i < tabs.length; i++) {
-      chrome.tabs.sendMessage(tabs[i].id, {});
-    }
-  });
+select1.onchange = function() {
+  let label = select1.querySelector(`option[value=${this.value}]`).label;
+  chrome.storage.local.set({ lang1: { value: this.value, label: label } });
 };
 
-lang2.onchange = function(e) {
-  chrome.storage.local.set({ lang2: e.target.value });
-  chrome.tabs.query({ url: "<all_urls>" }, tabs => {
-    for (let i = 1; i < tabs.length; i++) {
-      chrome.tabs.sendMessage(tabs[i].id, {});
-    }
-  });
+select2.onchange = function() {
+  let label = select2.querySelector(`option[value=${this.value}]`).label;
+  chrome.storage.local.set({ lang2: { value: this.value, label: label } });
 };
