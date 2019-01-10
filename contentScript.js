@@ -59,26 +59,23 @@ let translator = new Translator();
 let switchStatus, lang1, lang2;
 
 chrome.storage.local.get(["switchStatus", "lang1", "lang2"], function(e) {
-  if (!e.switchStatus) {
+  if (e.switchStatus) {
+    switchStatus = e.switchStatus;
+  } else {
     switchStatus = "off";
     chrome.storage.local.set({ switchStatus: "off" });
   }
-  if (!e.lang1) {
+  if (e.lang1) {
+    lang1 = e.lang1;
+  } else {
     lang1 = { value: "auto", label: "auto" };
     chrome.storage.local.set({ lang1: { value: "auto", label: "auto" } });
   }
-  if (!e.lang2) {
-    lang2 = { value: "zh-CN", label: "简体中文" };
-    chrome.storage.local.set({ lang2: { value: "zh-CN", label: "简体中文" } });
-  }
-  if (e.switchStatus) {
-    switchStatus = e.switchStatus;
-  }
-  if (e.lang1) {
-    lang1 = e.lang1;
-  }
   if (e.lang2) {
     lang2 = e.lang2;
+  } else {
+    lang2 = { value: "zh-CN", label: "简体中文" };
+    chrome.storage.local.set({ lang2: { value: "zh-CN", label: "简体中文" } });
   }
 });
 
@@ -89,7 +86,7 @@ chrome.storage.onChanged.addListener(function(e) {
   if (e.lang2) {
     lang2 = e.lang2.newValue;
   }
-  if (switchStatus) {
+  if (e.switchStatus) {
     switchStatus = e.switchStatus.newValue;
   }
 });

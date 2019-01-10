@@ -4,15 +4,13 @@ let select2 = document.querySelector("#select2");
 chrome.storage.local.get(["lang1", "lang2"], function(e) {
   if (e.lang1) {
     select1.value = e.lang1.value;
-  }
-  if (e.lang2) {
-    select2.value = e.lang2.value;
-  }
-  if (!e.lang1) {
+  } else {
     select1.value = "auto";
     chrome.storage.local.set({ lang1: { value: "auto", label: "auto" } });
   }
-  if (!e.lang2) {
+  if (e.lang2) {
+    select2.value = e.lang2.value;
+  } else {
     select2.value = "zn-CN";
     chrome.storage.local.set({ lang1: { value: "zh-CN", label: "简体中文" } });
   }

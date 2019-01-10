@@ -3,14 +3,12 @@ let lang1, lang2;
 chrome.storage.local.get(["lang1", "lang2"], function(e) {
   if (e.lang1) {
     lang1 = e.lang1;
+  } else {
+    lang1 = { value: "auto", label: "auto" };
   }
   if (e.lang2) {
     lang2 = e.lang2;
-  }
-  if (!e.lang1) {
-    lang1 = { value: "auto", label: "auto" };
-  }
-  if (!e.lang1) {
+  } else {
     lang1 = { value: "zh-CN", label: "简体中文" };
   }
 });
